@@ -1,0 +1,46 @@
+{% extends "expenses/base.html" %}
+
+{% block content %}
+<h2>All Expenses</h2>
+<nav>
+    <a href="{% url 'export_expenses_csv' %}" style="color: Red;"><b>Export CSV</b></a>
+</nav>
+<p style="color: white;">Total: ₹{{ total }}</p>
+<form method="get" class="mb-3">
+  <label for="category">Category:</label>
+  <select name="category" id="category">
+    <option value="all">All</option>
+    {% for cat in categories %}
+      <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>
+        {{ cat.name }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <label for="date_from">From:</label>
+  <input type="date" name="date_from" value="{{ date_from }}">
+
+  <label for="date_to">To:</label>
+  <input type="date" name="date_to" value="{{ date_to }}">
+
+  <button type="submit">Filter</button>
+</form>
+
+<table>
+    <tr>
+        <th>Title</th><th>Amount</th><th>Category</th><th>Date</th><th>Actions</th>
+    </tr>
+    {% for exp in expenses %}
+    <tr>
+        <td>{{ exp.title }}</td>
+        <td>₹{{ exp.amount }}</td>
+        <td>{{ exp.category }}</td>
+        <td>{{ exp.date }}</td>
+        <td>
+            <a href="{% url 'edit_expense' exp.pk %}">Edit</a> |
+            <a href="{% url 'delete_expense' exp.pk %}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
