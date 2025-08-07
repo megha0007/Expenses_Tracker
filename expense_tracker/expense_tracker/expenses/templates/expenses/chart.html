@@ -1,0 +1,49 @@
+{% extends "expenses/base.html" %}
+{% block content %}
+{% comment %} <h2 style="color: white;">Category Summary Chart</h2> {% endcomment %}
+<h2 style="color: white;">Category Summary Chart</h2>
+<canvas id="summaryChart" width="200" height="100"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('summaryChart').getContext('2d');
+    const summaryChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ categories|safe }},
+            datasets: [{
+                label: 'Total by Category',
+                data: {{ totals|safe }},
+                backgroundColor: ['#b4ceddff', '#f7b9e4ff', '#ff9800', '#4caf50', '#763d80ff']
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    ticks: {
+                        color: 'white'   // X-axis labels color
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.2)'  // X-axis grid lines
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: 'white'   // Y-axis labels color
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.2)'  // Y-axis grid lines
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'white'  // Legend label color
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}
